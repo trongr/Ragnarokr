@@ -1,7 +1,3 @@
-const express = require("express")
-
-const router = (module.exports = express.Router())
-
 /**
  *
  * @param {*} req
@@ -66,22 +62,25 @@ function ValidatePlayerLeaveGameHandler(req, res, next) {}
  */
 function PlayerLeaveGameHandler(req, res, next) {}
 
-router.post("/", ValidateCreateNewPlayerHandler, CreateNewPlayerHandler)
-
-router.post(
-  "/:PlayerID/JoinGame/:GameID",
-  ValidatePlayerJoinGameHandler,
-  PlayerJoinGameHandler,
-)
-
-router.post(
-  "/:PlayerID/SpectateGame/:GameID",
-  ValidatePlayerSpectateGameHandler,
-  PlayerSpectateGameHandler,
-)
-
-router.post(
-  "/:PlayerID/LeaveGame/:GameID",
-  ValidatePlayerLeaveGameHandler,
-  PlayerLeaveGameHandler,
-)
+module.exports = (app) => {
+  app.post(
+    "/api/v1/player/",
+    ValidateCreateNewPlayerHandler,
+    CreateNewPlayerHandler,
+  )
+  app.post(
+    "/api/v1/player/:PlayerID/JoinGame/:GameID",
+    ValidatePlayerJoinGameHandler,
+    PlayerJoinGameHandler,
+  )
+  app.post(
+    "/api/v1/player/:PlayerID/SpectateGame/:GameID",
+    ValidatePlayerSpectateGameHandler,
+    PlayerSpectateGameHandler,
+  )
+  app.post(
+    "/api/v1/player/:PlayerID/LeaveGame/:GameID",
+    ValidatePlayerLeaveGameHandler,
+    PlayerLeaveGameHandler,
+  )
+}

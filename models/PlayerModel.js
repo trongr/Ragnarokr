@@ -1,1 +1,1 @@
-module.exports = class Player {}
+module.exports = class PlayerModel {}

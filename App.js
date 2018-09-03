@@ -29,10 +29,11 @@ app.get("/", (req, res) => {
 })
 app.get("/health", (req, res) => res.send({ ok: true }))
 app.use("/public", express.static("public"))
-app.use("/api/v1/auth", Routes.AuthRouter)
-app.use("/api/v1/player", Routes.PlayerRouter)
-app.use("/api/v1/game", Routes.GameRouter)
+
+Routes.AuthRouter(app)
+Routes.PlayerRouter(app)
+Routes.GameRouter(app)
 
 const PORT = process.env.PORT || 8080
 http.createServer(app).listen(PORT)
-logger.error(`SERVER_RESTARTING PORT:${PORT}`)
+logger.error(`SERVER_RESTARTING ${PORT}`)
