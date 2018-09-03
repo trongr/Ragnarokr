@@ -1,24 +1,38 @@
 const http = require("http")
 const express = require("express")
+const expressWinston = require("express-winston")
 const bodyParser = require("body-parser")
 const path = require("path")
 const logger = require("./utils/logger.js")
-const AuthRouter = require("./routes/AuthRouter.js")
+const Routes = require("./routes")
 
 const app = express()
 
+app.use(
+  expressWinston.logger({
+    winstonInstance: logger,
+    meta: false,
+    expressFormat: true,
+    colorize: true,
+  }),
+)
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-app.use("/public", express.static("public"))
+app.use("*", (req, res, next) => {
+  req.body = { ...req.body, ...req.query }
+  next()
+})
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(`${__dirname}/public/index.html`))
 })
 app.get("/health", (req, res) => res.send({ ok: true }))
+app.use("/public", express.static("public"))
+app.use("/api/v1/auth", Routes.AuthRouter)
+app.use("/api/v1/player", Routes.PlayerRouter)
+app.use("/api/v1/game", Routes.GameRouter)
 
-app.use("/api/v1/auth", AuthRouter)
-
-const port = process.env.PORT || 8080
-http.createServer(app).listen(port)
-logger.info(`LISTENING_ON_PORT: ${port}`)
+const PORT = process.env.PORT || 8080
+http.createServer(app).listen(PORT)
+logger.error(`SERVER_RESTARTING PORT:${PORT}`)
