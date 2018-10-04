@@ -1,40 +1,17 @@
-/**
- *
- * @param {*} req
- * @param {*} res
- * @param {*} next
- */
-function ValidateCreateNewGameHandler(req, res, next) {}
-
-/**
- *
- * @param {*} req
- * @param {*} res
- * @param {*} next
- */
-function CreateNewGameHandler(req, res, next) {}
-
-/**
- *
- * @param {*} req
- * @param {*} res
- * @param {*} next
- */
-function ValidatePlayerMoveHandler(req, res, next) {}
-
-/**
- *
- * @param {*} req
- * @param {*} res
- * @param {*} next
- */
-function PlayerMoveHandler(req, res, next) {}
+const ValidatorMiddleware = require("./ValidatorMiddleware.js")
+const GameHandler = require("./GameHandler.js")
 
 module.exports = (app) => {
-  app.post("/api/v1/game", ValidateCreateNewGameHandler, CreateNewGameHandler)
+  app.get(
+    "/api/v1/game",
+    // GameHandler.validateCreateNewGame,
+    // ValidatorMiddleware.check,
+    GameHandler.createNewGame,
+  )
   app.post(
     "/api/v1/game/:GameID/player/:PlayerID/unit/:UnitID/move/:x/:y",
-    ValidatePlayerMoveHandler,
-    PlayerMoveHandler,
+    GameHandler.validatePlayerMove,
+    ValidatorMiddleware.check,
+    GameHandler.playerMove,
   )
 }

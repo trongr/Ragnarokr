@@ -1,6 +1,4 @@
 const { createLogger, format, transports } = require("winston")
-
-/* eslint-disable-next-line */
 require("winston-papertrail").Papertrail
 
 const { combine, timestamp, label, printf } = format

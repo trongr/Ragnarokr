@@ -4,7 +4,6 @@ const expressWinston = require("express-winston")
 const bodyParser = require("body-parser")
 const path = require("path")
 const logger = require("./utils/logger.js")
-const Routes = require("./routes")
 
 const app = express()
 
@@ -25,15 +24,15 @@ app.use("*", (req, res, next) => {
 })
 
 app.get("/", (req, res) => {
-  res.sendFile(path.join(`${__dirname}/public/index.html`))
+  res.sendFile(path.join(`${__dirname}/public/pages/index.html`))
 })
 app.get("/health", (req, res) => res.send({ ok: true }))
 app.use("/public", express.static("public"))
 
-Routes.AuthRouter(app)
-Routes.PlayerRouter(app)
-Routes.GameRouter(app)
+require("./routes/AuthRouter.js")(app)
+require("./routes/PlayerRouter.js")(app)
+require("./routes/GameRouter.js")(app)
 
 const PORT = process.env.PORT || 8080
 http.createServer(app).listen(PORT)
-logger.error(`SERVER_RESTARTING ${PORT}`)
+logger.error(`SERVER RESTARTING. PORT: ${PORT}`)
